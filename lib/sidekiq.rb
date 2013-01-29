@@ -1,5 +1,3 @@
-require 'sidekiq'
-
 module Sidekiq
   module Logging
 

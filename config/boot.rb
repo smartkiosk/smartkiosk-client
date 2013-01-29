@@ -10,6 +10,8 @@ require 'sinatra/activerecord'
 require 'sinatra/reloader'
 require 'sinatra/json'
 
+require 'sidekiq'
+
 module Smartkiosk
   class Client < Sinatra::Base
     register Sinatra::ActiveRecordExtension

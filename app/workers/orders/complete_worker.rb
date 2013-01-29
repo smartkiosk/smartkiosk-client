@@ -1,4 +1,3 @@
-require 'sidekiq'
 require 'rest-client'
 
 Application.load 'lib/sidekiq'

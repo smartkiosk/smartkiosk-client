@@ -1,5 +1,3 @@
-require 'sidekiq'
-
 Application.load 'lib/sidekiq'
 
 module Orders
