@@ -24,11 +24,18 @@ module Smartkiosk
       Sidekiq.startup!
       super
     end
+
+    def self.load_tasks!
+      Dir[root.join "lib/tasks/*.rb"].each {|file| require file}
+    end
+
+    def self.load_app!
+      %w(uploaders models workers controllers).each do |dir|
+        Dir[root.join "app/#{dir}/**/*.rb"].each {|file| require file }
+      end
+    end
   end
 end
 
 Application = Smartkiosk::Client
-
-%w(uploaders models workers controllers).each do |dir|
-  Dir["app/#{dir}/**/*.rb"].each {|file| require_relative File.join('..', file) }
-end
+Application.load_app!
