@@ -45,7 +45,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rubyzip',                   '0.9.9'
   gem.add_dependency 'pry',                       '0.9.10'
 
-  gem.add_dependency 'smartware',                 '0.2.8'
+  gem.add_dependency 'smartware',                 '0.3.1'
   gem.add_dependency 'smartguard',                '0.3.11'
   gem.add_dependency 'amqp',                      '0.9.8'
 
