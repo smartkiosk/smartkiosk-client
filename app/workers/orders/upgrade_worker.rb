@@ -1,3 +1,4 @@
+require 'sidekiq'
 require 'pathname'
 require 'rubygems'
 require 'fileutils'
