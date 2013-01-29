@@ -1,6 +1,6 @@
 require "zip/zip"
 
-task :release do
+task :pack do
   exclude = [
     'tmp/',
     'config/services/',
