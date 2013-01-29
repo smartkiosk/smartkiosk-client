@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'eventmachine'
+require 'thin'
+require 'trollop'
+
+require './config/boot'
+
+opts = Trollop.options do
+  version "Smartkiosk::Client #{Smartkiosk::Client::VERSION}"
+  banner "Smartkiosk client application"
+  opt :log, "Log file to use", type: String
+end
+
+Smartkiosk::Client::Logging.destination = opts[:log] if opts[:log]
+Smartkiosk::Client::Logging.init
+
+EventMachine.run do
+  Thin::Server.start '0.0.0.0', 3001 do
+    map '/assets' do
+      run Application.sprockets
+    end
+    use Smartkiosk::Client::Logging::Middleware
+    run Application
+  end
+end

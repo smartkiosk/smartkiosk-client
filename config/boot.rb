@@ -1,3 +1,4 @@
+require 'bundler/setup'
 require 'pry'
 require 'active_support/all'
 require 'sass'
@@ -19,12 +20,11 @@ module Smartkiosk
     end
 
     configure do
-      set :assets_types,  %w(javascripts stylesheets images)
+      set :assets_types,  %w(javascripts stylesheets images flash)
       set :root,          Pathname.new(File.expand_path '../..', __FILE__)
       set :sprockets,     Sprockets::Environment.new(root)
       set :database_file, root.join('config/services/database.yml')
       set :views,         [File.expand_path('../../app/views', __FILE__)]
-      set :logging,        true
 
       assets_types.map do |x|
         sprockets.append_path root.join("app/assets/#{x}")
@@ -85,6 +85,8 @@ module Smartkiosk
       %w(uploaders models workers controllers).each do |dir|
         Dir[File.expand_path "../../app/#{dir}/**/*.rb", __FILE__].each {|file| require file }
       end
+
+      load 'lib/smartkiosk/client/logging'
     end
 
     def self.expand!(path)

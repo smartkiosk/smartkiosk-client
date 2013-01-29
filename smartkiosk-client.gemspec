@@ -26,6 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'sprockets',                 '2.8.2'
   gem.add_dependency 'sprockets-sass',            '0.9.1'
   gem.add_dependency 'sprockets-helpers',         '0.8.0'
+  gem.add_dependency 'trollop',                   '2.0'
 
   gem.add_dependency 'activesupport',             '3.2.11'
   gem.add_dependency 'smartkiosk-common',         '0.0.2'
@@ -46,7 +47,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'pry',                       '0.9.10'
 
   gem.add_dependency 'smartware',                 '0.3.1'
-  gem.add_dependency 'smartguard',                '0.3.11'
+  gem.add_dependency 'smartguard',                '0.3.12'
   gem.add_dependency 'amqp',                      '0.9.8'
 
   gem.add_dependency 'sidekiq',                   '2.6.5'

@@ -11,10 +11,5 @@ task :sidekiq do
 end
 
 task :web do
-  require 'eventmachine'
-  require 'thin'
-
-  EventMachine.run do
-    Smartkiosk::Client.run! :server => 'thin', :port => 3001
-  end
+  exec('bundle exec smartkiosk-client')
 end
