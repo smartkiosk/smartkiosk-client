@@ -10,7 +10,7 @@ task :sidekiq do
   exec('bundle exec sidekiq -q pings -q payments -q orders -q sync -q scheduled -r ./app.rb')
 end
 
-task :server do
+task :web do
   require 'eventmachine'
   require 'thin'
 
