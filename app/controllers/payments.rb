@@ -4,13 +4,13 @@ class Application
     json (payment.check ? payment.as_json : false)
   end
 
-  post '/payments/open/:id' do
+  post '/payments/:id/open' do
     payment = Payment.find(params[:id])
     Smartware.cash_acceptor.open(payment.limit.try('[]', :min), payment.limit.try('[]', :max))
     json (Smartware.cash_acceptor.error.blank? ? true : false)
   end
 
-  post '/payments/pay/:id' do
+  post '/payments/:id/pay' do
     payment = Payment.find(params[:id])
     Smartware.cash_acceptor.close
     payment.update_attributes :banknotes => Smartware.cash_acceptor.banknotes
