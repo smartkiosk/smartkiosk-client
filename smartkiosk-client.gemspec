@@ -21,8 +21,10 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'sinatra',                   '1.3.4'
   gem.add_dependency 'sinatra-activerecord',      '1.2.1'
   gem.add_dependency 'sinatra-contrib',           '1.3.2'
+  gem.add_dependency 'haml',                      '3.1.7'
+  gem.add_dependency 'sass',                      '3.2.5'
   gem.add_dependency 'sprockets',                 '2.8.2'
-  gem.add_dependency 'sinatra-sprockets-ext',     '0.0.5'
+  gem.add_dependency 'sprockets-sass',            '0.9.1'
 
   gem.add_dependency 'activesupport',             '3.2.11'
   gem.add_dependency 'smartkiosk-common',         '0.0.2'
@@ -36,7 +38,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rest-client',               '1.6.7'
   gem.add_dependency 'recursive-open-struct',     '0.2.1'
 
-  gem.add_dependency 'haml',                      '3.1.7'
   gem.add_dependency 'liquid',                    '2.4.1'
   gem.add_dependency 'file-tail',                 '1.0.12'
 
