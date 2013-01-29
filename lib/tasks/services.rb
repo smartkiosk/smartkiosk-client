@@ -15,6 +15,6 @@ task :web do
   require 'thin'
 
   EventMachine.run do
-    Smartkiosk::Client.run! :server => 'thin', :port => 3000
+    Smartkiosk::Client.run! :server => 'thin', :port => 3001
   end
 end
