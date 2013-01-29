@@ -3,40 +3,54 @@ require 'active_support/all'
 require 'sass'
 require 'sprockets'
 require 'sprockets/sass'
+require 'sprockets/helpers'
 
 require 'sinatra/base'
 require 'sinatra/activerecord'
 require 'sinatra/reloader'
 require 'sinatra/json'
 
-require_relative 'environment'
-
 module Smartkiosk
   class Client < Sinatra::Base
     register Sinatra::ActiveRecordExtension
 
+    helpers do
+      include Sprockets::Helpers
+    end
+
+    configure do
+      set :assets_types,  %w(javascripts stylesheets images)
+      set :root,          Pathname.new(File.expand_path '../..', __FILE__)
+      set :sprockets,     Sprockets::Environment.new(root)
+      set :database_file, '../config/services/database.yml'
+      set :views,         [File.expand_path('../../app/views', __FILE__)]
+      set :logging,        true
+
+      assets_types.map do |x|
+        sprockets.append_path root.join("app/assets/#{x}")
+        sprockets.append_path root.join("vendor/assets/#{x}")
+      end
+
+      ActiveRecord::Base.include_root_in_json = false
+      ActiveRecord::Migrator.migrations_paths = [root.join('db/migrate')]
+    end
+
     configure :development do
       register Sinatra::Reloader
-    end
 
-    set :assets_types,  %w(javascripts stylesheets images)
-    set :root,          Pathname.new(File.expand_path '../..', __FILE__)
-    set :assets,        Sprockets::Environment.new(root)
-    set :database_file, '../config/services/database.yml'
-    set :views,         [File.expand_path('../../app/views', __FILE__)]
-
-    assets_types.map do |x|
-      assets.append_path root.join("app/assets/#{x}")
-      assets.append_path root.join("vendor/assets/#{x}")
-    end
-
-    use Module.new {
-      def self.new(app)
-        Rack::Builder.new(app) do
-          map('/assets') { run Smartkiosk::Client.assets }
-        end
+      Sprockets::Helpers.configure do |config|
+        config.environment = sprockets
+        config.expand = true
       end
-    }
+    end
+
+    configure :production do
+      Sprockets::Helpers.configure do |config|
+        config.environment = sprockets
+        config.expand = false
+        config.digest = true
+      end
+    end
 
     def find_template(views, name, engine, &block)
       Array(views).each { |v| super(v.to_s, name, engine, &block) }
@@ -45,6 +59,11 @@ module Smartkiosk
     def json(data)
       content_type :json
       data.to_json
+    end
+
+    get "/assets/*" do
+      env["PATH_INFO"].sub!(%r{^/assets}, "")
+      settings.sprockets.call(env)
     end
 
     def self.load(path)
@@ -74,8 +93,8 @@ module Smartkiosk
       set :views, views + [root.join('app/views')]
 
       assets_types.map do |x|
-        assets.append_path root.join("app/assets/#{x}")
-        assets.append_path root.join("vendor/assets/#{x}")
+        sprockets.append_path root.join("app/assets/#{x}")
+        sprockets.append_path root.join("vendor/assets/#{x}")
       end
     end
   end

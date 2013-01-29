@@ -18,7 +18,6 @@ module Payments
                     :fields => payment.fields,
                     :session_id => payment.id
                   }
-      Rails.logger.info "Check response: #{response.to_s}"
 
       answer = JSON.parse(response.to_s, :symbolize_names => true)
 
@@ -30,7 +29,6 @@ module Payments
                                   :checked     => true
       end
     rescue => e
-      Rails.logger.error e.message
       Payment.find(payment_id).update_attributes :error => true
     end
   end

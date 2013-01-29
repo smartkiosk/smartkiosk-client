@@ -11,10 +11,10 @@ class Application
   end
 
   post '/config' do
-    params[:smartware][:interfaces] = params[:smartware][:interfaces].values
+    params['smartware']['interfaces'] = params['smartware']['interfaces'].values
 
     configs.each do |key, value|
-      value.marshal_load params[key].to_hash_recursive unless params[key].blank?
+      value.marshal_load params[key] unless params[key].blank?
       value.save!
     end
 

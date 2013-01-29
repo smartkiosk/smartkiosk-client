@@ -17,19 +17,19 @@ class Application
       result[:terminal] = Terminal.as_json
     end
 
-    json result.to_json
+    json result
   end
 
   get '/terminal/condition' do
-    Terminal.condition.merge(:keyword => Terminal.keyword).to_json
+    json Terminal.condition.merge(:keyword => Terminal.keyword)
   end
 
   get '/terminal/logs' do
     files = {
       :smartguard => '/var/log/smartguard.log',
-      :front => Rails.root.join('log/production.log'),
-      :sidekiq => Rails.root.join('log/sidekiq.log'),
-      :smartware => Rails.root.join('log/smartware.log')
+      :front => Application.root.join('log/production.log'),
+      :sidekiq => Application.root.join('log/sidekiq.log'),
+      :smartware => Application.root.join('log/smartware.log')
     }
 
     files.keys.each do |entry|
