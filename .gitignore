@@ -1,3 +1,4 @@
 pkg/
 db/*.sqlite3
 Gemfile.lock
+tmp/*
