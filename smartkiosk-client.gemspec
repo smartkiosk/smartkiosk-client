@@ -16,11 +16,15 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 
+  gem.add_dependency 'rake',                      '10.0.3'
   gem.add_dependency 'thin',                      '1.5.0'
   gem.add_dependency 'sinatra',                   '1.3.4'
   gem.add_dependency 'sinatra-activerecord',      '1.2.1'
   gem.add_dependency 'sinatra-contrib',           '1.3.2'
+  gem.add_dependency 'sprockets',                 '2.8.2'
+  gem.add_dependency 'sinatra-sprockets-ext',     '0.0.5'
 
+  gem.add_dependency 'activesupport',             '3.2.11'
   gem.add_dependency 'smartkiosk-common',         '0.0.2'
 
   gem.add_dependency 'sqlite3',                   '1.3.6'

@@ -1,9 +1,9 @@
 require 'yaml'
-require_relative 'config_chunk'
+require_relative 'chunk'
 
 module Smartkiosk
   module Config
-    class YAML < ConfigChunk
+    class YAML < Chunk
 
       def initialize(file)
         super load_yml(@file = file)

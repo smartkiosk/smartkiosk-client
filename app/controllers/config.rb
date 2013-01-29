@@ -7,7 +7,7 @@ class Application
   end
 
   get '/config' do
-    Hash[*configs.map{|k,v| [k, v.marshal_dump]}.flatten].to_json
+    json Hash[*configs.map{|k,v| [k, v.marshal_dump]}.flatten]
   end
 
   post '/config' do
@@ -18,6 +18,6 @@ class Application
       value.save!
     end
 
-    Hash[*configs.map{|k,v| [k, v.marshal_dump]}.flatten].to_json
+    json Hash[*configs.map{|k,v| [k, v.marshal_dump]}.flatten]
   end
 end

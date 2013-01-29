@@ -1,13 +1,13 @@
 class Application
   post '/payments' do
     payment = Payment.create! params[:payment]
-    (payment.check ? payment.as_json : false).to_json
+    json (payment.check ? payment.as_json : false)
   end
 
   post '/payments/open/:id' do
     payment = Payment.find(params[:id])
     Smartware.cash_acceptor.open(payment.limit.try('[]', :min), payment.limit.try('[]', :max))
-    (Smartware.cash_acceptor.error.blank? ? true : false).to_json
+    json (Smartware.cash_acceptor.error.blank? ? true : false)
   end
 
   post '/payments/pay/:id' do
@@ -16,15 +16,15 @@ class Application
     payment.update_attributes :banknotes => Smartware.cash_acceptor.banknotes
     payment.receipt.print
     payment.pay
-    ""
+    nil
   end
 
   get '/payments/cash' do
-    Smartware.cash_acceptor.sum.to_json
+    json Smartware.cash_acceptor.sum.to_json
   end
 
   get '/payments/reset' do
     Smartware.cash_acceptor.close
-    ""
+    nil
   end
 end

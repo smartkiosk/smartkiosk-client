@@ -4,8 +4,7 @@
     %meta{:charset => "utf-8"}
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
     %title banners
-    = javascript_include_tag "application"
-    = csrf_meta_tags
+    = javascript_include_tag "jquery"
 
     :javascript
       var playBanner;
@@ -17,7 +16,7 @@
         return $.get("/banners/playlist?prev=" + prev, function(banner) {
           var playNext,
             _this = this;
-          if (banner.filename.last(4) === '.swf') {
+          if (banner.filename.substr(banner.filename.length-4) === '.swf') {
             $('video').hide();
             $('video').attr('src', '');
             $('object').show();

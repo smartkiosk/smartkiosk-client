@@ -17,7 +17,7 @@ class Application
       result[:terminal] = Terminal.as_json
     end
 
-    result.to_json
+    json result.to_json
   end
 
   get '/terminal/condition' do
@@ -43,46 +43,46 @@ class Application
       end if File.exist?(path)
     end
 
-    files.to_json
+    json files
   end
 
   post '/terminal/enable' do
     Terminal.enable
-    {:state => Terminal.actual_state}.to_json
+    json(:state => Terminal.actual_state)
   end
 
   post '/terminal/disable' do
     Terminal.disable
-    {:state => Terminal.actual_state}.to_json
+    json(:state => Terminal.actual_state)
   end
 
   post '/terminal/reload' do
     Terminal.reload
-    {:state => Terminal.actual_state}.to_json
+    json(:state => Terminal.actual_state)
   end
 
   post '/terminal/reboot' do
     Terminal.reboot
-    {:state => Terminal.actual_state}.to_json
+    json(:state => Terminal.actual_state)
   end
 
   get '/terminal/test_connection' do
     begin
       uri = URI.parse(Terminal.config.host)
 
-      {
+      json(
         :server_http => Pinger.http(Terminal.config.host),
         :server_ping => Pinger.external(uri.host),
         :google_ping => Pinger.external('google.com')
-      }.to_json
+      )
     rescue
-      {}.to_json
+      json {}
     end
   end
 
   get '/terminal/test_printer' do
     Smartware.printer.test
-    ""
+    nil
   end
 
   get '/terminal/print_balance' do
@@ -99,6 +99,6 @@ class Application
                               }
 
     receipt.print
-    ""
+    nil
   end
 end

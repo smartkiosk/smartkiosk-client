@@ -5,6 +5,6 @@ class Application
       collection.receipt.print
     end
 
-    collection.to_json
+    json collection
   end
 end
