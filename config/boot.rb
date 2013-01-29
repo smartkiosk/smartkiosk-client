@@ -67,8 +67,8 @@ module Smartkiosk
       set :database_file, root.join('config/services/database.yml')
       set :views, views + [root.join('app/views')]
 
-      assets.map do |x|
-        Sinatra::Sprockets.environment.append_path root.join("app/assets/#{x}")
+      assets_types.map do |x|
+        assets.append_path root.join("app/assets/#{x}")
       end
     end
   end
