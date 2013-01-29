@@ -15,6 +15,10 @@ task :server do
   require 'thin'
 
   EventMachine.run do
-    Smartkiosk::Client.run! :server => 'thin', :port => 3000
+    environment = ENV['ENV'].blank? ? :development : ENV['ENV'].to_sym
+
+    Smartkiosk::Client.run! :server => 'thin',
+      :port => 3000,
+      :environment => environment
   end
 end
