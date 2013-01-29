@@ -1,0 +1,13 @@
+interfaces:
+  - name: CashAcceptor
+    uri: druby://localhost:6001
+    driver: CCNET
+    port: /dev/ttyS0
+  - name: Modem
+    uri: druby://localhost:6002
+    driver: Dummy
+    port: /dev/mux1
+  - name: Printer
+    uri: druby://localhost:6005
+    driver: TG24XX
+    port: /dev/ttyS4

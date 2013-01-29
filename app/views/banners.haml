@@ -1,0 +1,51 @@
+!!!
+%html{:lang => "ru"}
+  %head
+    %meta{:charset => "utf-8"}
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
+    %title banners
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+
+    :javascript
+      var playBanner;
+
+      playBanner = function(prev) {
+        if (prev == null) {
+          prev = 0;
+        }
+        return $.get("/banners/playlist?prev=" + prev, function(banner) {
+          var playNext,
+            _this = this;
+          if (banner.filename.last(4) === '.swf') {
+            $('video').hide();
+            $('video').attr('src', '');
+            $('object').show();
+            $('object').attr('data', banner.filename);
+            $('object > embed').attr('src', banner.filename);
+            return playNext = setTimeout(function() {
+              return playBanner(banner.playorder);
+            }, parseInt(parseFloat(banner.duration) * 1000));
+          } else {
+            $('object').hide();
+            $('object').attr('data', '');
+            $('object > embed').attr('src', '');
+            $('video').show();
+            $('video').attr('src', banner.filename);
+            $('video')[0].play();
+            return playNext = setTimeout(function() {
+              $('video')[0].pause();
+              return playBanner(banner.playorder);
+            }, parseInt(parseFloat(banner.duration) * 1000));
+          }
+        });
+      };
+
+      playBanner();
+
+
+  %body{:style => 'margin: 0; padding: 0;'}
+    %video{:width => "1280", :height => "1024", :type => 'video/webm', :style => "max-height: 1019px; max-width: 1280px;" }
+    %object{:height => '1019', :width => '1280', :type => "application/x-shockwave-flash" }
+      %param{:name => "autoplay", :value => "true"}
+      %embed{:height => '1019', :width => '1280' }

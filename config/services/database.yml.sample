@@ -1,0 +1,33 @@
+development:
+  adapter: postgresql
+  host: localhost
+  port: 5432
+  username: smartkiosk-dev
+  password: smartkiosk-dev
+  database: smartkiosk-dev
+  schema_search_path: public
+  encoding: utf8
+  pool: 30
+
+test:
+  adapter: postgresql
+  host: localhost
+  port: 5432
+  username: smartkiosk-tst
+  password: smartkiosk-tst
+  database: smartkiosk-tst
+  schema_search_path: public
+  encoding: utf8
+  pool: 30
+
+production:
+  adapter: postgresql
+  host: localhost
+  port: 5432
+  username: smartkiosk-prd
+  password: smartkiosk-prd
+  database: smartkiosk-prd
+  schema_search_path: public
+  encoding: utf8
+  pool: 30
+

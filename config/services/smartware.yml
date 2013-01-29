@@ -1,0 +1,28 @@
+---
+connection_timeout: ''
+interfaces:
+- name: Modem
+  uri: druby://localhost:6002
+  status_channel: ''
+  ppp_channel: ''
+  poll_interval: ''
+  balance_interval: ''
+  driver: Dummy
+  port: ''
+  apn: ''
+  balance_ussd: ''
+- name: CashAcceptor
+  uri: druby://localhost:6001
+  driver: Dummy
+  port: ''
+- name: Printer
+  uri: druby://localhost:6005
+  driver: Dummy
+  port: ''
+- name: Watchdog
+  uri: druby://localhost:6003
+  pidfile: /var/run/watchdogd.pid
+  driver: Dummy
+- name: CardReader
+  uri: druby://localhost:6004
+  driver: Dummy

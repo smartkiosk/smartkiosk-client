@@ -1,0 +1,12 @@
+---
+:verbose: false
+:pidfile: tmp/pids/sidekiq.pid
+:namespace: sidekiq_namespace
+:concurrency:  25
+:queues:
+  - [pings, 1]
+  - [payments, 1]
+  - [orders, 1]
+  - [sync, 1]
+  - [scheduled, 1]
+  - [default, 1]

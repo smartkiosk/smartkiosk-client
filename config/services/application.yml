@@ -1,0 +1,4 @@
+---
+smartguard_host: druby://localhost:10000
+keyword: LOCAL
+host: http://localhost:3000
