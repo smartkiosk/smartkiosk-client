@@ -1,6 +1,6 @@
 require 'rest-client'
 
-Application.load 'lib/sidekiq'
+Application.load 'lib/smartkiosk/sidekiq'
 
 class PingWorker
   include Sidekiq::Worker

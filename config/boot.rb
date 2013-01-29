@@ -10,8 +10,6 @@ require 'sinatra/activerecord'
 require 'sinatra/reloader'
 require 'sinatra/json'
 
-require 'sidekiq'
-
 module Smartkiosk
   class Client < Sinatra::Base
     register Sinatra::ActiveRecordExtension
@@ -24,7 +22,7 @@ module Smartkiosk
       set :assets_types,  %w(javascripts stylesheets images)
       set :root,          Pathname.new(File.expand_path '../..', __FILE__)
       set :sprockets,     Sprockets::Environment.new(root)
-      set :database_file, '../config/services/database.yml'
+      set :database_file, root.join('config/services/database.yml')
       set :views,         [File.expand_path('../../app/views', __FILE__)]
       set :logging,        true
 
@@ -73,7 +71,7 @@ module Smartkiosk
     end
 
     def self.run!(*args)
-      load 'lib/sidekiq'
+      load 'lib/smartkiosk/sidekiq'
       Sidekiq.startup!
       super
     end

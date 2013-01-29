@@ -2,7 +2,7 @@ require 'pathname'
 require 'rubygems'
 require 'fileutils'
 
-Application.load 'lib/sidekiq'
+Application.load 'lib/smartkiosk/sidekiq'
 
 module Orders
   class UpgradeWorker

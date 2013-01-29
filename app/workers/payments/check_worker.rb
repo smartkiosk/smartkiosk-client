@@ -1,6 +1,6 @@
 require 'rest-client'
 
-Application.load 'lib/sidekiq'
+Application.load 'lib/smartkiosk/sidekiq'
 
 module Payments
   class CheckWorker
