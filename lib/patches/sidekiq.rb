@@ -10,4 +10,11 @@ module Sidekiq
       end
     end
   end
+
+  def self.startup!
+    jobs = Sidekiq::Queue.new("startup").map do |job|
+      job.delete
+      job.klass.constantize.new.perform(*job.args)
+    end
+  end
 end

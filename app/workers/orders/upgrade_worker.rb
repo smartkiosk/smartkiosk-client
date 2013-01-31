@@ -21,7 +21,9 @@ module Orders
       @build_pathname    = @releases_pathname.join @build_version.to_s
 
       self.sync!
-      Smartkiosk::Client::SmartguardInterface.instance.post_order order_id, "switch_release", @build_version.to_s
+      Terminal.smartguard.switch_release @build_version.to_s.to_sym do
+        order.complete
+      end
     end
 
     def files!
