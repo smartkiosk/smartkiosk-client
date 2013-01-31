@@ -17,11 +17,11 @@ module Orders
       @base_url      = URI.parse(order.args[3]).scheme.nil? ? "#{Terminal.config.host}#{order.args[3]}"
                                                             : order.args[3]
 
-      @releases_pathname = Terminal.smartguard.releases_path
+      @releases_pathname = Smartguard::Client.releases_path
       @build_pathname    = @releases_pathname.join @build_version.to_s
 
       self.sync!
-      Terminal.smartguard.switch_release @build_version.to_s.to_sym do
+      Smartguard::Client.switch_release @build_version.to_s.to_sym do
         order.complete
       end
     end

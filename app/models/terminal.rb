@@ -1,4 +1,5 @@
 require 'smartware'
+require 'smartguard'
 require 'socket'
 require 'redis'
 require 'redis/objects'
@@ -14,10 +15,6 @@ class Terminal
 
   value :support_phone, :global => true
   value :providers_updates, :global => true, :marshal => true
-
-  def self.smartguard
-    DRbObject.new_with_uri(Terminal.config.smartguard_host)
-  end
 
   #
   # STATES
@@ -62,14 +59,14 @@ class Terminal
   end
 
   def self.reload
-    smartguard.restart_async
+    Smartguard::Client.restart_async
   end
 
   def self.reboot
     self.state = 'rebooting'
     StartupWorker.perform_async self.name, :enable
 
-    smartguard.reboot_async
+    Smartguard::Client.reboot_async
   end
 
   #
