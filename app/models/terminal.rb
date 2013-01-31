@@ -15,10 +15,6 @@ class Terminal
   value :support_phone, :global => true
   value :providers_updates, :global => true, :marshal => true
 
-  def self.smartguard
-    DRbObject.new_with_uri(Terminal.config.smartguard_host)
-  end
-
   #
   # STATES
   #
@@ -62,14 +58,16 @@ class Terminal
   end
 
   def self.reload
-    smartguard.restart_async
+    Smartkiosk::Client::SmartguardInterface.instance.post_order -1, 'restart'
   end
 
   def self.reboot
     self.state = 'rebooting'
-    StartupWorker.perform_async self.name, :enable
+    Smartkiosk::Client::SmartguardInterface.instance.post_order -2, 'reboot'
+  end
 
-    smartguard.reboot_async
+  def self.complete_local(id)
+    enable if id == -2
   end
 
   #
@@ -154,5 +152,38 @@ class Terminal
       },
       :version => Terminal.version
     }
+  end
+
+  # Shim for AMQP-only smartware. Kill me!
+  if !Smartware.respond_to? :cash_acceptor
+    module Smartware
+      class Dummy
+        def error
+          nil
+        end
+
+        def model
+          "dummy"
+        end
+
+        def version
+          ""
+        end
+      end
+
+      class << self
+        def cash_acceptor
+          Dummy.new
+        end
+
+        def printer
+          Dummy.new
+        end
+
+        def modem
+          Dummy.new
+        end
+      end
+    end
   end
 end

@@ -23,11 +23,18 @@ EventMachine.run do
   #
   AMQP.current = AMQP.channel
   Redis.current = Redis.new
-
-  #
-  # Running through all startup tasks
-  #
-  Sidekiq.startup!
+  Smartkiosk::Client::SmartguardInterface.instance.read_order_completion do |id|
+    Smartkiosk::Client::Logging.logger.debug "completing smartguard order #{id}"
+    begin
+      if id < 0
+        Terminal.complete_local id
+      else
+        Order.find(id).complete
+      end
+    rescue => e
+      Smartkiosk::Client::Logging.logger.error "unable to complete order #{id}: #{e}"
+    end
+  end
 
   #
   # Serving front

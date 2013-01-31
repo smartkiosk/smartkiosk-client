@@ -72,6 +72,7 @@ module Smartkiosk
 
     def self.load_app!
       load 'lib/smartkiosk/client/logging'
+      load 'lib/smartkiosk/client/smartguard_interface'
       load 'lib/patches/amqp'
       load 'lib/patches/sidekiq'
 

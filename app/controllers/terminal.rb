@@ -22,7 +22,7 @@ class Application
     files.keys.each do |entry|
       path = files[entry]
       files[entry] = []
-      
+
       File.open(path) do |f|
         f.extend(File::Tail)
         f.backward(1000)
