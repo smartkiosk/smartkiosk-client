@@ -27,7 +27,7 @@ class Payment < ActiveRecord::Base
       r.update_attributes :template => self.receipt_template, 
         :keyword => 'payment',
         :fields => {
-          :recipient => provider.title,
+          :recipient => title,
           :account => account,
           :payment_paid_amount => paid_amount || 0,
           :payment_enrolled_amount => ((paid_amount || 0) - (commission_amount || 0)).round(2),
@@ -50,7 +50,7 @@ class Payment < ActiveRecord::Base
   end
 
   def title
-    provider.title
+    provider.title rescue "-"
   end
 
   def commission_for(amount)
