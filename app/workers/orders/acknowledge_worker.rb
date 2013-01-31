@@ -1,7 +1,5 @@
 require 'rest-client'
 
-Application.load 'lib/smartkiosk/sidekiq'
-
 module Orders
   class AcknowledgeWorker
     include Sidekiq::Worker

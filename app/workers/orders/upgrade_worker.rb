@@ -2,8 +2,6 @@ require 'pathname'
 require 'rubygems'
 require 'fileutils'
 
-Application.load 'lib/smartkiosk/sidekiq'
-
 module Orders
   class UpgradeWorker
     include Sidekiq::Worker

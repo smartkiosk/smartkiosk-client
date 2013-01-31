@@ -1,5 +1,3 @@
-Application.load 'lib/smartkiosk/sidekiq'
-
 module Orders
   class DisableWorker
     include Sidekiq::Worker

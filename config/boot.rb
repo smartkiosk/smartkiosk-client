@@ -61,19 +61,8 @@ module Smartkiosk
       data.to_json
     end
 
-    get "/assets/*" do
-      env["PATH_INFO"].sub!(%r{^/assets}, "")
-      settings.sprockets.call(env)
-    end
-
     def self.load(path)
       require File.expand_path File.join('../..', path), __FILE__
-    end
-
-    def self.run!(*args)
-      load 'lib/smartkiosk/sidekiq'
-      Sidekiq.startup!
-      super
     end
 
     def self.load_tasks!
@@ -82,11 +71,15 @@ module Smartkiosk
     end
 
     def self.load_app!
+      load 'lib/smartkiosk/client/logging'
+      load 'lib/patches/amqp'
+      load 'lib/patches/sidekiq'
+
       %w(uploaders models workers controllers).each do |dir|
         Dir[File.expand_path "../../app/#{dir}/**/*.rb", __FILE__].each {|file| require file }
       end
 
-      load 'lib/smartkiosk/client/logging'
+      self
     end
 
     def self.expand!(path)
@@ -102,5 +95,4 @@ module Smartkiosk
   end
 end
 
-Application = Smartkiosk::Client
-Application.load_app!
+(Application = Smartkiosk::Client).load_app!

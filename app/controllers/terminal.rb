@@ -4,20 +4,7 @@ Application.load 'lib/pinger'
 
 class Application
   get '/terminal' do
-    Terminal.payment_in_progress = params[:payment_in_progress] == 'true'
-
-    result = {
-      :enabled => Terminal.enabled?,
-      :started_at => Terminal.started_at.value
-    }
-
-    modified_at = Terminal.actual_modified_at.change(:usec => 0)
-
-    if params[:modified_at] && (modified_at > DateTime.parse(params[:modified_at]))
-      result[:terminal] = Terminal.as_json
-    end
-
-    json result
+    json Terminal
   end
 
   get '/terminal/condition' do
@@ -48,22 +35,22 @@ class Application
 
   post '/terminal/enable' do
     Terminal.enable
-    json(:state => Terminal.actual_state)
+    json(:state => Terminal.state)
   end
 
   post '/terminal/disable' do
     Terminal.disable
-    json(:state => Terminal.actual_state)
+    json(:state => Terminal.state)
   end
 
   post '/terminal/reload' do
     Terminal.reload
-    json(:state => Terminal.actual_state)
+    json(:state => Terminal.state)
   end
 
   post '/terminal/reboot' do
     Terminal.reboot
-    json(:state => Terminal.actual_state)
+    json(:state => Terminal.state)
   end
 
   get '/terminal/test_connection' do

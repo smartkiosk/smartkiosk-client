@@ -1,5 +1,3 @@
-Application.load 'lib/smartkiosk/sidekiq'
-
 module Orders
   class RebootWorker
     include Sidekiq::Worker

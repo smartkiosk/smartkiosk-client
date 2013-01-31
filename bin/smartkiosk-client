@@ -2,6 +2,7 @@
 
 require 'bundler/setup'
 require 'eventmachine'
+require 'em-websocket'
 require 'thin'
 require 'trollop'
 
@@ -17,11 +18,52 @@ Smartkiosk::Client::Logging.destination = opts[:log] if opts[:log]
 Smartkiosk::Client::Logging.init
 
 EventMachine.run do
+  #
+  # Connecting services
+  #
+  AMQP.current = AMQP.channel
+  Redis.current = Redis.new
+
+  #
+  # Running through all startup tasks
+  #
+  Sidekiq.startup!
+
+  #
+  # Serving front
+  #
   Thin::Server.start '0.0.0.0', 3001 do
     map '/assets' do
       run Application.sprockets
     end
     use Smartkiosk::Client::Logging::Middleware
     run Application
+  end
+
+  #
+  # Serving WebSockets
+  #
+  @front_orders = EM::Channel.new
+
+  AMQP.current.queue("front").subscribe do |message|
+    @front_orders.push message
+  end
+
+  EventMachine.add_periodic_timer 1 do
+    @front_orders.push ['state', Terminal.state].to_json
+  end
+
+  EventMachine.add_periodic_timer 5 do
+    @front_orders.push ['modified_at', Terminal.modified_at].to_json
+  end
+
+  EventMachine::WebSocket.run(:host => '0.0.0.0', :port => 3002) do |ws|
+    ws.onopen {
+      sid = @front_orders.subscribe { |msg| ws.send msg }
+
+      ws.onclose {
+        @front_orders.unsubscribe(sid)
+      }
+    }
   end
 end

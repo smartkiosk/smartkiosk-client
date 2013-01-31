@@ -1,5 +1,3 @@
-Application.load 'lib/smartkiosk/sidekiq'
-
 class StartupWorker
   include Sidekiq::Worker
 

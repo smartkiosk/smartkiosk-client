@@ -1,7 +1,5 @@
 require 'rest-client'
 
-Application.load 'lib/smartkiosk/sidekiq'
-
 module Payments
   class PayWorker
     include Sidekiq::Worker

@@ -1,3 +1,5 @@
+require 'smartkiosk/common'
+
 module Smartkiosk
   class Client
     module Logging extend Smartkiosk::Common::Logging

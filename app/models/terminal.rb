@@ -8,8 +8,7 @@ Application.load 'lib/smartkiosk/config/yaml'
 class Terminal
   include Redis::Objects
 
-  value :state, :global => true
-  value :started_at, :global => true, :marshal => true
+  value :actual_state, :global => true
   value :modified_at, :global => true, :marshal => true
   value :payment_in_progress, :global => true
 
@@ -35,8 +34,12 @@ class Terminal
     self.payment_in_progress.value == "true"
   end
 
-  def self.actual_state
-    self.state.value || 'active'
+  def self.state
+    self.actual_state.value || 'active'
+  end
+
+  def self.state=(value)
+    self.actual_state = value
   end
 
   def self.actual_modified_at
@@ -81,7 +84,7 @@ class Terminal
   end
 
   def self.enabled?
-    self.actual_state == 'active'
+    self.state == 'active'
   end
 
   def self.version
@@ -101,9 +104,8 @@ class Terminal
     Socket.do_not_reverse_lookup = orig
   end
 
-  def self.as_json
+  def self.as_json(*args)
     {
-      :started_at => Terminal.started_at.value,
       :modified_at => Terminal.actual_modified_at,
       :keyword => Terminal.keyword,
       :support_phone => Terminal.support_phone.value,
@@ -113,10 +115,14 @@ class Terminal
     }
   end
 
+  def self.to_json(*args)
+    as_json.to_json
+  end
+
   def self.condition
     {
       :ip => ip,
-      :state => Terminal.actual_state,
+      :state => Terminal.state,
       :banknotes => Payment.merge_banknotes(Payment.uncollected),
       :cash => Payment.merge_cash(Payment.uncollected),
       :providers => {

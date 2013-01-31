@@ -1,5 +1,3 @@
-Application.load 'lib/smartkiosk/sidekiq'
-
 module Payments
   class CollectWorker
     include Sidekiq::Worker
