@@ -13,7 +13,10 @@ class Application
   post '/payments/:id/pay' do
     payment = Payment.find(params[:id])
     Smartware.cash_acceptor.close
-    payment.update_attributes :banknotes => Smartware.cash_acceptor.banknotes
+    payment.update_attributes(
+      :banknotes => Smartware.cash_acceptor.banknotes,
+      :payment_type => params['payment']['payment_type']
+    )
     payment.receipt.print
     payment.pay
     nil

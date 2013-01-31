@@ -11,7 +11,10 @@ module Payments
       response = RestClient.post "#{Terminal.config.host}/payments/#{payment.foreign_id}/pay",
                                  :provider => payment.provider.keyword,
                                  :terminal => Terminal.config.keyword,
-                                 :payment => { :paid_amount => payment.paid_amount }
+                                 :payment => { 
+                                   :paid_amount => payment.paid_amount,
+                                   :payment_type => payment.payment_type
+                                 }
       Sidekiq::Logging.logger.debug "Pay response: #{response.to_s}"
       payment.update_attributes(:processed => true) if response
     end

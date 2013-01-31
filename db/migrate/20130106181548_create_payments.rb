@@ -18,6 +18,8 @@ class CreatePayments < ActiveRecord::Migration
       t.decimal    :paid_amount, :precision => 38, :scale => 2
       t.decimal    :commission_amount, :precision => 38, :scale => 2
 
+      t.integer    :payment_type
+
       t.timestamps
     end
 
