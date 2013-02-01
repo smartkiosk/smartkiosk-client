@@ -43,7 +43,7 @@ EventMachine.run do
   end
 
   Smartware.subscribe do |key, *value|
-    @front.orders.push ["smartware.#{key}", value].to_json
+    @front_orders.push ["smartware.#{key}", value].to_json
   end
 
   EventMachine::WebSocket.run(:host => '0.0.0.0', :port => 3002) do |ws|
