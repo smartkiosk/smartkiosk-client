@@ -1,13 +1,15 @@
 class Application
   post '/payments' do
     payment = Payment.create! params[:payment]
+
     json (payment.check ? payment.as_json : false)
   end
 
   post '/payments/:id/open_cash_acceptor' do
     payment = Payment.find(params[:id])
     Smartware.cash_acceptor.open(payment.limit.try('[]', :min), payment.limit.try('[]', :max))
-    json (Smartware.cash_acceptor.error.blank? ? true : false)
+
+    json Smartware.cash_acceptor.error.blank?
   end
 
   post '/payments/close_cash_acceptor' do
@@ -17,10 +19,12 @@ class Application
 
   post '/payments/open_card_reader' do
     Smartware.card_reader.open
+    nil
   end
 
   post '/payments/close_card_reader' do
     Smartware.card_reader.close
+    nil
   end
 
   post '/payments/:id/pay' do
