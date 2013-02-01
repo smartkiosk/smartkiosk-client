@@ -5,6 +5,7 @@ require 'fileutils'
 module Orders
   class UpgradeWorker
     include Sidekiq::Worker
+    include DurableOrderExecution
 
     sidekiq_options :queue => :orders
 
@@ -21,8 +22,8 @@ module Orders
       @build_pathname    = @releases_pathname.join @build_version.to_s
 
       self.sync!
-      Smartguard::Client.switch_release @build_version.to_s.to_sym do
-        order.complete
+      safely_execute_order(order_id) do
+        Smartguard::Client.switch_release @build_version.to_s.to_sym
       end
     end
 

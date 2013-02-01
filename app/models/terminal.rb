@@ -63,9 +63,6 @@ class Terminal
   end
 
   def self.reboot
-    self.state = 'rebooting'
-    StartupWorker.perform_async self.name, :enable
-
     Smartguard::Client.reboot_async
   end
 

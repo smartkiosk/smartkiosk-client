@@ -25,11 +25,6 @@ EventMachine.run do
   Redis.current = Redis.new
 
   #
-  # Running through all startup tasks
-  #
-  Sidekiq.startup!
-
-  #
   # Serving front
   #
   Thin::Server.start '0.0.0.0', 3001 do

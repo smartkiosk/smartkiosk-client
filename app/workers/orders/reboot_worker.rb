@@ -1,16 +1,14 @@
 module Orders
   class RebootWorker
     include Sidekiq::Worker
+    include DurableOrderExecution
 
     sidekiq_options :queue => :orders
 
     def perform(order_id)
-      StartupWorker.perform_async self.class.name, :finish, [order_id]
-      Terminal.reboot
-    end
-
-    def self.finish(order_id)
-      Order.find(order_id).complete
+      safely_execute_order(order_id) do
+        Smartguard::Client.reboot
+      end
     end
   end
 end
