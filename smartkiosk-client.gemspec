@@ -5,8 +5,8 @@ require 'smartkiosk/client/version'
 Gem::Specification.new do |gem|
   gem.name          = 'smartkiosk-client'
   gem.version       = Smartkiosk::Client::VERSION
-  gem.authors       = ['Boris Staal']
-  gem.email         = ['boris@roundlake.ru']
+  gem.authors       = ['Boris Staal', 'Sergey Gridasov']
+  gem.email         = ['boris@roundlake.ru', 'grindars@gmail.com']
   gem.description   = %q{Smartkiosk client application}
   gem.summary       = gem.description
   gem.homepage      = 'https://github.com/smartkiosk/smartkiosk-client'
