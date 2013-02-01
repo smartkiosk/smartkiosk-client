@@ -9,7 +9,6 @@ require 'sprockets/helpers'
 require 'sinatra/base'
 require 'sinatra/activerecord'
 require 'sinatra/reloader'
-require 'sinatra/json'
 
 module Smartkiosk
   class Client < Sinatra::Base
