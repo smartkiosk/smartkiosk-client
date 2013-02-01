@@ -51,8 +51,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'smartware',                 '0.3.1'
   gem.add_dependency 'smartguard',                '0.3.12'
-  gem.add_dependency 'amqp',                      '0.9.8'
-  gem.add_dependency 'bunny',                     '0.9.0.pre6'
 
   gem.add_dependency 'sidekiq',                   '2.6.5'
   gem.add_dependency 'slim',                      '1.3.4'

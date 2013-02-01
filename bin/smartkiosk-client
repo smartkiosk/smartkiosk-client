@@ -19,12 +19,6 @@ Smartkiosk::Client::Logging.init
 
 EventMachine.run do
   #
-  # Connecting services
-  #
-  AMQP.current = AMQP.channel
-  Redis.current = Redis.new
-
-  #
   # Serving front
   #
   Thin::Server.start '0.0.0.0', 3001 do
@@ -39,10 +33,6 @@ EventMachine.run do
   # Serving WebSockets
   #
   @front_orders = EM::Channel.new
-
-  AMQP.current.queue("front").subscribe do |message|
-    @front_orders.push message
-  end
 
   EventMachine.add_periodic_timer 1 do
     @front_orders.push ['state', Terminal.state].to_json
