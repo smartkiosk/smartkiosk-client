@@ -49,8 +49,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rubyzip',                   '0.9.9'
   gem.add_dependency 'pry',                       '0.9.10'
 
-  gem.add_dependency 'smartware',                 '0.4.2'
-  gem.add_dependency 'smartguard',                '0.4'
+  gem.add_dependency 'smartware',                 '0.4.3'
+  gem.add_dependency 'smartguard',                '0.4.1'
 
   gem.add_dependency 'sidekiq',                   '2.6.5'
   gem.add_dependency 'slim',                      '1.3.4'
