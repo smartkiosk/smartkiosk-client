@@ -19,6 +19,8 @@ class CreatePayments < ActiveRecord::Migration
       t.decimal    :commission_amount, :precision => 38, :scale => 2
 
       t.integer    :payment_type
+      t.string     :card_track1
+      t.string     :card_track2
 
       t.timestamps
     end

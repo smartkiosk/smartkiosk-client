@@ -13,10 +13,14 @@ class Payment < ActiveRecord::Base
   serialize :banknotes
 
   validates :provider, :presence => true
+  validates :payment_type, :presence => true
 
   before_save do
     if banknotes
       self.paid_amount = banknotes.inject(0){|sum, (nominal, count)| sum + nominal.to_i*count.to_i }
+    end
+
+    if paid_amount
       self.commission_amount = commission_for(self.paid_amount)
     end
   end
