@@ -73,6 +73,8 @@ module Smartkiosk
       load 'lib/smartkiosk/client/logging'
       load 'lib/patches/sidekiq'
 
+      require_relative "../app/workers/orders/durable_order_execution"
+
       %w(uploaders models workers controllers).each do |dir|
         Dir[File.expand_path "../../app/#{dir}/**/*.rb", __FILE__].each {|file| require file }
       end
