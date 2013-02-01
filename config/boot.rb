@@ -79,7 +79,7 @@ module Smartkiosk
         Dir[File.expand_path "../../app/#{dir}/**/*.rb", __FILE__].each {|file| require file }
       end
 
-      CarrierWave.root = Application.public_folder
+      CarrierWave.root = ->() { Application.public_folder }
 
       self
     end
