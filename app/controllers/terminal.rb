@@ -14,7 +14,7 @@ class Application
   get '/terminal/logs' do
     files = {
       :smartguard => '/var/log/smartguard.log',
-      :front => Application.root.join('log/production.log'),
+      :front => Application.root.join('log/web.log'),
       :sidekiq => Application.root.join('log/sidekiq.log'),
       :smartware => Application.root.join('log/smartware.log')
     }
@@ -22,12 +22,12 @@ class Application
     files.keys.each do |entry|
       path = files[entry]
       files[entry] = []
-      
-      File.open(path) do |f|
-        f.extend(File::Tail)
-        f.backward(1000)
-        1000.times{ files[entry] << f.readline } rescue nil
-      end if File.exist?(path)
+
+      next unless File.exist? path
+
+      File::Tail::Logfile.tail(path, :backward => 1000, :return_if_eof => true) do |line|
+        files[entry] << line
+      end
     end
 
     json files
