@@ -3,6 +3,7 @@ require 'smartguard'
 require 'socket'
 require 'redis'
 require 'redis/objects'
+require 'file-tail'
 
 Application.load 'lib/smartkiosk/config/yaml'
 
