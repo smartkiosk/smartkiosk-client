@@ -37,21 +37,35 @@ class PingWorker
           return
         end
 
-        unless Terminal.support_phone.value == response[:support_phone]
-          Terminal.support_phone = response[:support_phone]
-          Terminal.modified_at = DateTime.now
-        end
-
         Sidekiq::Logging.logger.info "Response: #{response.inspect}"
+
+        #
+        # PROFILE
+        #
+        unless Terminal.modified_at == response[:profile][:modified_at]
+          Terminal.support_phone = response[:profile][:support_phone]
+          Terminal.modified_at = response[:profile][:modified_at]
+          Sync::LogoWorker.perform_async response[:profile][:logo]
+        end
 
         #
         # ORDERS
         #
-        response[:orders].each do |order|
-          next unless Order.find_by_foreign_id(order[:id]).blank?
+        response[:orders].each do |foreign|
+          existing = Order.find_by_foreign_id(foreign[:id])
 
-          order[:foreign_id] = order.delete(:id)
-          order = Order.create!(order)
+          unless existing.nil?
+            if existing.foreign_created_at == foreign[:created_at] || # same order, not yet acknowleged
+               !existing.complete?                                    # not completed yet
+                next
+            end
+
+            existing.destroy
+          end
+
+          foreign[:foreign_id] = foreign.delete(:id)
+          foreign[:foreign_created_at] = foreign.delete(:created_at)
+          order = Order.create!(foreign)
 
           order.acknowledge
           order.perform

@@ -1,4 +1,4 @@
 ---
 smartguard_host: druby://localhost:10000
 keyword: LOCAL
-host: http://localhost:3000
+host: http://admin.smartkiosk-mkb.rdlk.biz

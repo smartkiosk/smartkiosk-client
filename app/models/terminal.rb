@@ -15,6 +15,7 @@ class Terminal
   value :payment_in_progress, :global => true
 
   value :support_phone, :global => true
+  value :logo_url, :global => true
   value :providers_updates, :global => true, :marshal => true
 
   #
