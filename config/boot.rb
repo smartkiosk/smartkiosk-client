@@ -24,6 +24,7 @@ module Smartkiosk
       set :sprockets,     Sprockets::Environment.new(root)
       set :database_file, root.join('config/services/database.yml')
       set :views,         [File.expand_path('../../app/views', __FILE__)]
+      set :logging, nil
 
       assets_types.map do |x|
         sprockets.append_path root.join("app/assets/#{x}")

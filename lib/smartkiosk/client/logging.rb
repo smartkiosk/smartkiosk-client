@@ -12,6 +12,8 @@ module Smartkiosk
 
         def call(env)
           began_at = Time.now
+
+          env['rack.logger'] = Smartkiosk::Client::Logging.logger
           status, header, body = @app.call(env)
           header = Rack::Utils::HeaderHash.new(header)
           log(env, status, header, began_at)
