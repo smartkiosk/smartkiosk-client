@@ -3,7 +3,7 @@ class Pinger
     result = true
 
     begin
-      RestClient.get uri
+      RestClient::Resource.new(uri, :timeout => 5, :open_timeout => 5).get
     rescue RestClient::Forbidden
     rescue Exception => e
       result = e.to_s
