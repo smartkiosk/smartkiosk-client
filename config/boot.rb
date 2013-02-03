@@ -33,6 +33,16 @@ module Smartkiosk
 
       ActiveRecord::Base.include_root_in_json = false
       ActiveRecord::Migrator.migrations_paths = [root.join('db/migrate')]
+
+      error do
+        error = env['sinatra.error']
+        logger.error "Uncaught error: #{error.message}"
+        error.backtrace.each { |l| logger.error l }
+
+        send_file "public/500.html",
+                :type => 'text/html; charset=utf-8',
+                :status => 500
+      end
     end
 
     configure :development do
@@ -50,6 +60,8 @@ module Smartkiosk
         config.expand = false
         config.digest = true
       end
+
+      disable :dump_errors
     end
 
     def find_template(views, name, engine, &block)
