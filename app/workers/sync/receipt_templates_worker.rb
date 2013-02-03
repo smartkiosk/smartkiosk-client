@@ -15,6 +15,8 @@ module Sync
       templates = JSON.parse(response.to_s, :symbolize_names => true)
 
       templates.each do |entry|
+        Sidekiq::Logging.logger.info "Got #{entry[:keyword]} receipt template"
+
         ReceiptTemplate.find_or_create_by_keyword(entry[:keyword]).
           update_attributes :template => entry[:template]
       end

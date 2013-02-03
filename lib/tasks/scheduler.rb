@@ -13,7 +13,7 @@ task :schedule do
     Terminal.ping
   end
 
-  scheduler.every '3h' do
+  scheduler.every '3h', :first_in => '1s' do
     logger.debug "Receipt Templates sync"
     Sync::ReceiptTemplatesWorker.perform_async
   end
