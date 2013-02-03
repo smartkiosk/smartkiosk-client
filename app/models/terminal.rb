@@ -103,6 +103,7 @@ class Terminal
   def self.as_json(*args)
     {
       :modified_at => Terminal.actual_modified_at,
+      :logo_url => Terminal.logo_url,
       :keyword => Terminal.keyword,
       :support_phone => Terminal.support_phone.value,
       :groups => Group.all.map{|x| x.as_json},
