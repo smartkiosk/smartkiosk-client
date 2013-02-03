@@ -11,7 +11,7 @@ class Receipt < ActiveRecord::Base
   def print
     data   = fields.merge(:id => id, :keyword => Terminal.config.keyword)
     result = Liquid::Template.parse(template).render data.with_indifferent_access
-    update_attributes(:printed => true) if Smartware.printer.print_text(result)
+    update_attributes(:printed => true) if Smartware.printer.print_text(result, 15)
   end
 
   def document_title

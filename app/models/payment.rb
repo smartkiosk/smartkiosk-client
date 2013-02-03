@@ -6,6 +6,8 @@ class Payment < ActiveRecord::Base
 
   scope :complete, where(:processed => true)
   scope :uncollected, where(:collection_id => nil)
+  scope :cash, where(:payment_type => 0)
+  scope :cashless, where(arel_table[:payment_type].not_eq 0)
 
   serialize :fields
   serialize :limits

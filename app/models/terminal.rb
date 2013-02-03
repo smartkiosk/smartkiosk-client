@@ -120,7 +120,8 @@ class Terminal
       :ip => ip,
       :state => Terminal.state,
       :banknotes => Payment.merge_banknotes(Payment.uncollected),
-      :cash => Payment.merge_cash(Payment.uncollected),
+      :cash => Payment.merge_cash(Payment.uncollected.cash),
+      :cashless => Payment.merge_cash(Payment.uncollected.cashless),
       :providers => {
         :updated_at => Terminal.providers_updated_at,
         :ids => Provider.select(:foreign_id).map{|x| x.foreign_id} || []
