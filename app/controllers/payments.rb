@@ -10,7 +10,7 @@ class Application
     min = nil
     max = nil
 
-    if payment.limit.include? :min
+    if payment.limit && payment.limit.include?(:min)
       min = payment.limit[:min].to_i
       max = payment.limit[:max].to_i
     end
