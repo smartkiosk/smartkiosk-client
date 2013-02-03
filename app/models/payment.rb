@@ -10,7 +10,7 @@ class Payment < ActiveRecord::Base
   scope :cashless, where(arel_table[:payment_type].not_eq 0)
 
   serialize :fields
-  serialize :limits
+  serialize :limit
   serialize :commissions
   serialize :banknotes
 
@@ -30,7 +30,7 @@ class Payment < ActiveRecord::Base
   after_save do
     if checked?
       r = Receipt.find_or_create_by_document_id_and_document_type(id, self.class.name)
-      r.update_attributes :template => self.receipt_template, 
+      r.update_attributes :template => self.receipt_template,
         :keyword => 'payment',
         :fields => {
           :recipient => title,

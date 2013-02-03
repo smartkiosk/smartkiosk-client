@@ -7,7 +7,15 @@ class Application
 
   post '/payments/:id/open_cash_acceptor' do
     payment = Payment.find(params[:id])
-    Smartware.cash_acceptor.open(payment.limit.try('[]', :min), payment.limit.try('[]', :max))
+    min = nil
+    max = nil
+
+    if payment.limit.include? :min
+      min = payment.limit[:min].to_i
+      max = payment.limit[:max].to_i
+    end
+
+    Smartware.cash_acceptor.open min, max
 
     json Smartware.cash_acceptor.error.blank?
   end
