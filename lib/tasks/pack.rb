@@ -11,7 +11,7 @@ task :pack do
   ]
 
   builds   = Pathname.new("tmp/builds/")
-  zip_file = builds.join(File.read(Application.root.join "VERSION") + '.zip')
+  zip_file = builds.join(File.read(Application.root.join "VERSION").strip + '.zip')
 
   FileUtils.mkdir_p builds
   File.delete zip_file if File.exist? zip_file
