@@ -108,7 +108,7 @@ class Terminal
       :support_phone => Terminal.support_phone.value,
       :groups => Group.all.map{|x| x.as_json},
       :providers => Provider.active.map{|x| x.as_json},
-      :promotions => Promotion.order(:priority).limit(6).map{|x| x.provider_id}
+      :promotions => Promotion.active.order(:priority).limit(6).map{|x| x.provider_id}
     }
   end
 
