@@ -8,7 +8,7 @@ task :schedule do
     Smartkiosk::Common::Logging.format "Scheduler", severity, time, progname, msg
   end
 
-  scheduler.every '1m' do
+  scheduler.every '1m', :first_in => '1s' do
     logger.debug "Terminal ping"
     Terminal.ping
   end
