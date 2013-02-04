@@ -7,6 +7,10 @@ class Application
     json Terminal
   end
 
+  get '/front_error' do
+    logger.warn "#{params['url']}@#{params['line']}: #{params['message']}"
+  end
+
   get '/terminal/condition' do
     json Terminal.condition.merge(:keyword => Terminal.keyword)
   end
