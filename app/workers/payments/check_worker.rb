@@ -27,7 +27,7 @@ module Payments
                                   :limit            => answer[:limits].sort_by{|x| x[:weight]}.last,
                                   :commissions      => (answer[:commissions].empty? ? nil : answer[:commissions]),
                                   :receipt_template => answer[:receipt_template],
-                                  :checked          => true
+                                  :checked          => answer[:state] == 'checked'
       end
     end
   end
