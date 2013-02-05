@@ -1,8 +1,6 @@
 class CreateProviders < ActiveRecord::Migration
   def change
     create_table :providers do |t|
-      t.integer     :foreign_id
-
       t.belongs_to  :group
       t.string      :keyword
       t.string      :title
@@ -13,7 +11,5 @@ class CreateProviders < ActiveRecord::Migration
       t.boolean     :requires_print, :null => false, :default => false
       t.timestamps
     end
-
-    add_index :providers, :foreign_id, :unique => true
   end
 end

@@ -46,13 +46,11 @@ module Sync
           Group.destroy_all
 
           providers[:groups].each do |r|
-            attributes = {
-              :foreign_id => r[:id],
-              :priority   => r[:priority],
-              :group_id   => r[:group_id]
-            }
-
-            local = Group.create attributes
+            local = Group.new
+            local.id = r[:id]
+            local.priority = r[:priority]
+            local.group_id = r[:parent_id]
+            local.save!
 
             unless r[:icon].blank?
               syncs << ['Group', local.id, r[:icon]]
@@ -60,16 +58,15 @@ module Sync
           end
 
           providers[:providers].each do |r|
-            attributes = {
-              :foreign_id     => r.delete(:id)
-            }
+            icon = r.delete :icon
 
-            attributes.merge! r
+            local = Provider.new
+            local.id = r.delete :id
+            local.attributes = r
+            local.save!
 
-            local = Provider.create r
-
-            unless r[:icon].blank?
-              syncs << ['Provider', local.id, r[:icon]]
+            unless icon.blank?
+              syncs << ['Provider', local.id, icon]
             end
           end
 

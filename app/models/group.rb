@@ -8,12 +8,6 @@ class Group < ActiveRecord::Base
 
   mount_uploader :icon, IconUploader
 
-  attr_accessor :foreign_id
-
-  before_create do
-    self.id = self.foreign_id unless foreign_id.blank?
-  end
-
   after_save do
     Terminal.modified_at = DateTime.now
   end
