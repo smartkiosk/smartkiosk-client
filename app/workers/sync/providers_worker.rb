@@ -5,6 +5,7 @@ module Sync
     include Sidekiq::Worker
 
     sidekiq_options :retry => false, :queue => :sync
+
     SEMAPHORE = ConnectionPool.new(:size => 1, :timeout => 5) { true }
 
     def perform
@@ -48,6 +49,7 @@ module Sync
           providers[:groups].each do |r|
             local = Group.new
             local.id = r[:id]
+            local.title = r[:title]
             local.priority = r[:priority]
             local.group_id = r[:parent_id]
             local.save!
@@ -79,7 +81,7 @@ module Sync
         end
 
         Terminal.providers_updated_at = providers[:updated_at]
-        Sidekiq::Logging.logger.info "Providers updated. Timestamp: #{providers[:update_at]}"
+        Sidekiq::Logging.logger.info "Providers updated. Timestamp: #{providers[:updated_at]}"
         Sidekiq::Logging.logger.info "Icons to sync: #{syncs}"
 
         syncs.each do |args|
