@@ -1,6 +1,7 @@
 require 'pathname'
 require 'rubygems'
 require 'fileutils'
+require 'bundler'
 
 module Orders
   class UpgradeWorker
@@ -17,11 +18,14 @@ module Orders
       @build_id      = order.args[0]
       @base_url      = URI.parse(order.args[3]).scheme.nil? ? "#{Terminal.config.host}#{order.args[3]}"
                                                             : order.args[3]
+      @gems_url      = URI.parse(order.args[4])
 
       @releases_pathname = Smartguard::Client.releases_path
       @build_pathname    = @releases_pathname.join @build_version.to_s
 
       self.sync!
+      self.rewrite_sources!
+
       safely_execute_order(order_id) do
         Smartguard::Client.switch_release @build_version.to_s.to_sym
       end
@@ -103,5 +107,62 @@ module Orders
       end
     end
 
+    def rewrite_sources!
+      gemfilename = File.join(@build_pathname, "Gemfile")
+      lockfilename = File.join(@build_pathname, "Gemfile.lock")
+
+      gemfile = Bundler::Definition.build gemfilename,
+                                          lockfilename, {}
+
+      filtered = gemfile.sources.reject { |s| s.kind_of? Bundler::Source::Rubygems }
+      filtered.unshift(Bundler::Source::Rubygems.new("remotes" => [ @gems_url ]))
+
+      gemfile.instance_variable_set :@sources, filtered
+
+      File.open(gemfilename, "w") do |io|
+        io.puts "source #{@gems_url.to_s.inspect}"
+
+        groups = Hash.new { |hash, key| hash[key] = [] }
+
+        gemfile.dependencies.each do |gem|
+          gem.groups.each { |group| groups[group] << gem }
+        end
+
+        groups.each do |group, gems|
+          io.puts "group #{group.inspect} do"
+
+          gems.each do |gem|
+            io.print "  gem #{gem.name.inspect}, #{gem.requirement.inspect.inspect}"
+
+            if gem.platforms.any?
+              io.print ", :platforms => #{gem.platforms.inspect}"
+            end
+
+            case gem.source
+            when Bundler::Source::Git
+              io.print ", :git => #{gem.source.uri.inspect}"
+
+              unless gem.source.branch.nil?
+                io.print ", :branch => #{gem.source.branch.inspect}"
+              end
+
+              unless gem.source.ref.nil?
+                io.print ", :ref => #{gem.source.ref.inspect}"
+              end
+
+              if gem.source.submodules
+                io.print ", :submodules => true"
+              end
+            end
+
+            io.puts
+          end
+
+          io.puts "end"
+        end
+      end
+
+      File.open(lockfilename, "w") { |io| io.write gemfile.to_lock }
+    end
   end
 end
