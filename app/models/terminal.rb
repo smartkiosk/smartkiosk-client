@@ -68,6 +68,11 @@ class Terminal
     Smartguard::Client.reboot_async
   end
 
+  def self.recalibrate
+    Smartware.user_interface.delete_calibration
+    Smartware.user_interface.restart_ui
+  end
+
   #
   # CONDITON
   #

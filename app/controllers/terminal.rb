@@ -57,6 +57,10 @@ class Application
     json(:state => Terminal.state)
   end
 
+  post '/terminal/recalibrate' do
+    Terminal.recalibrate
+  end
+
   get '/terminal/test_connection' do
     begin
       uri = URI.parse(Terminal.config.host)
