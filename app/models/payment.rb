@@ -62,13 +62,13 @@ class Payment < ActiveRecord::Base
   def commission_for(amount)
     return 0 if commissions.blank?
 
-    commission = commissions.select{|x| x.max >= amount && amount >= x.min }.
+    commission = commissions.select{|x| x[:max].to_f >= amount && amount >= x[:min].to_f }.
       sort_by{|x| x[:weight]}.first
 
     return 0 if commission.blank?
 
-    static  = commission['static_fee'] || 0
-    percent = ((commission['percent_fee'] || 0)/100*amount).round(2)
+    static  = commission[:static_fee].try(:to_f) || 0
+    percent = ((commission[:percent_fee].try(:to_f) || 0)/100*amount).round(2)
 
     static+percent
   end
