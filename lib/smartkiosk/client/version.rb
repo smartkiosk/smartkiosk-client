@@ -2,6 +2,6 @@ require 'sinatra/base'
 
 module Smartkiosk
   class Client < Sinatra::Base
-    VERSION = '0.1.7'
+    VERSION = '0.1.8'
   end
 end
