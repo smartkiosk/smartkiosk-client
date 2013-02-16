@@ -143,7 +143,7 @@ class Terminal
       :printer => {
         :error => Smartware.printer.error,
         :model => Smartware.printer.model,
-       :version => Smartware.printer.version
+        :version => Smartware.printer.version
       },
       :modem => {
         :error => Smartware.modem.error,
@@ -151,6 +151,16 @@ class Terminal
         :balance => Smartware.modem.balance,
         :model => Smartware.modem.model,
         :version => Smartware.modem.version
+      },
+      :wachdog => {
+        :error => Smartware.watchdog.error,
+        :model => Smartware.watchdog.model,
+        :version => Smartware.watchdog.version
+      },
+      :card_reader => {
+        :error => Smartware.card_reader.error,
+        :model => Smartware.card_reader.model,
+        :version => Smartware.card_reader.version
       },
       :version => Terminal.version
     }
