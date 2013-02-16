@@ -38,7 +38,7 @@ class Payment < ActiveRecord::Base
           :payment_paid_amount => paid_amount || 0,
           :payment_enrolled_amount => ((paid_amount || 0) - (commission_amount || 0)).round(2),
           :payment_commission_amount => commission_amount || 0,
-          :payment_paid_at => I18n.l(updated_at)
+          :payment_paid_at => I18n.l(updated_at.in_time_zone Time.zone)
         }
     end
   end

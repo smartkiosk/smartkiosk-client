@@ -5,10 +5,13 @@ require 'sass'
 require 'sprockets'
 require 'sprockets/sass'
 require 'sprockets/helpers'
+require 'timezone_local'
 
 require 'sinatra/base'
 require 'sinatra/activerecord'
 require 'sinatra/reloader'
+
+Time.zone = TimeZone::Local.get()
 
 module Smartkiosk
   class Client < Sinatra::Base

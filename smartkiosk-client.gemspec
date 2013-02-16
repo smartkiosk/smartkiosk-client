@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'sprockets-sass',            '0.9.1'
   gem.add_dependency 'sprockets-helpers',         '0.8.0'
   gem.add_dependency 'trollop',                   '2.0'
+  gem.add_dependency 'timezone_local',            '0.1.5'
 
   gem.add_dependency 'eventmachine',              '1.0.0'
   gem.add_dependency 'em-websocket',              '0.4.0'
