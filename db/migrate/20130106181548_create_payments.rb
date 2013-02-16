@@ -14,6 +14,7 @@ class CreatePayments < ActiveRecord::Migration
       t.boolean    :checked, :default => false
       t.boolean    :processed, :default => false
       t.boolean    :failed, :default => false
+      t.text       :meta
 
       t.decimal    :paid_amount, :precision => 38, :scale => 2
       t.decimal    :commission_amount, :precision => 38, :scale => 2

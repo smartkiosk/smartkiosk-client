@@ -41,15 +41,20 @@ class Application
     Smartware.cash_acceptor.close
 
     if payment.payment_type == 0
-      payment.update_attributes(:banknotes => Smartware.cash_acceptor.banknotes)
+      attributes = {
+        :banknotes => Smartware.cash_acceptor.banknotes
+      }
     else
-      payment.update_attributes(
+      attributes = {
         :paid_amount => params['payment']['paid_amount'],
         :card_track1 => params['payment']['card_track1'],
         :card_track2 => params['payment']['card_track2']
-      )
+      }
     end
 
+    attributes[:meta] = params['payment']['meta']
+
+    payment.update_attributes attributes
     payment.receipt.print
     payment.pay
     nil

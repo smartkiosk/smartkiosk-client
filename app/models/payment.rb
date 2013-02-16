@@ -13,6 +13,7 @@ class Payment < ActiveRecord::Base
   serialize :limit
   serialize :commissions
   serialize :banknotes
+  serialize :meta
 
   validates :provider, :presence => true
   validates :payment_type, :presence => true
