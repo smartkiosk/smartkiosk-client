@@ -152,7 +152,7 @@ class Terminal
         :model => Smartware.modem.model,
         :version => Smartware.modem.version
       },
-      :wachdog => {
+      :watchdog => {
         :error => Smartware.watchdog.error,
         :model => Smartware.watchdog.model,
         :version => Smartware.watchdog.version
