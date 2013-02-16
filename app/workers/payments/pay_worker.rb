@@ -11,8 +11,8 @@ module Payments
       response = RestClient.post "#{Terminal.config.host}/payments/#{payment.foreign_id}/pay",
                                  :provider => payment.provider.keyword,
                                  :terminal => Terminal.config.keyword,
-                                 :meta => payment.meta,
                                  :payment => {
+                                    :meta        => payment.meta,
                                     :paid_amount => payment.paid_amount,
                                     :card_track1 => payment.card_track1,
                                     :card_track2 => payment.card_track2
