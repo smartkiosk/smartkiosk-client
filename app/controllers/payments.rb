@@ -27,7 +27,8 @@ class Application
 
   post '/payments/open_card_reader' do
     Smartware.card_reader.open
-    nil
+
+    json Smartware.card_reader.error.blank?
   end
 
   post '/payments/close_card_reader' do
