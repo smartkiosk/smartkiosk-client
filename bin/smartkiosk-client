@@ -42,8 +42,19 @@ EventMachine.run do
     @front_orders.push ['modified_at', Terminal.modified_at].to_json
   end
 
-  Smartware.subscribe do |key, *value|
-    @front_orders.push ["smartware.#{key}", value].to_json
+  Smartware.subscribe do |message|
+    if message.key == "modem.accounting"
+      message.acknowlege
+
+      p message
+
+      SessionRecord.create(started_at: message[0],
+                           upstream: message[1],
+                           downstream: message[2],
+                           time: message[3])
+    else
+      @front_orders.push ["smartware.#{message.key}", message.args].to_json
+    end
   end
 
   EventMachine::WebSocket.run(:host => '0.0.0.0', :port => 3002) do |ws|
