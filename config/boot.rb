@@ -6,6 +6,7 @@ require 'sprockets'
 require 'sprockets/sass'
 require 'sprockets/helpers'
 require 'timezone_local'
+require 'liquid'
 
 require 'sinatra/base'
 require 'sinatra/activerecord'
@@ -88,6 +89,7 @@ module Smartkiosk
     def self.load_app!
       load 'lib/smartkiosk/client/logging'
       load 'lib/patches/sidekiq'
+      load 'lib/liquid/default_filter'
 
       require_relative "../app/workers/orders/durable_order_execution"
 

@@ -1,5 +1,3 @@
-require 'liquid'
-
 class Receipt < ActiveRecord::Base
   belongs_to :document, :polymorphic => true
   serialize :fields
