@@ -5,7 +5,6 @@ class PingWorker
 
   sidekiq_options :retry => false, :queue => :pings
 
-  DAY = 24 * 3600
   SEMAPHORE = ConnectionPool.new(:size => 1, :timeout => 5) { true }
 
   def perform
@@ -14,34 +13,6 @@ class PingWorker
         condition = Terminal.condition
 
         Sidekiq::Logging.logger.info "Requesting with updated_at: #{Terminal.providers_updated_at}"
-
-        sessions_per_day = {}
-        sessions = SessionRecord.all
-
-        sessions.each do |session|
-          next if session.time == 0
-
-          session_start = session.started_at
-          session_start -= session_start % DAY
-          session_end = session.started_at + session.time
-
-          session_start.step(session_end - 1, DAY) do |day|
-            day_time = [ day + DAY - 1, session.started_at + session.time ].min -
-                       [ day, session.started_at ].max
-
-            fraction = day_time / session.time
-
-            sessions_per_day[day] = {
-              upstream:   session.upstream * fraction,
-              downstream: session.downstream * fraction,
-              time:       session.time * fraction
-            }
-          end
-        end
-
-        sessions.each do |day, charges|
-          Sidekiq::Logging.logger.info "reporting #{charges.inspect} on #{day}"
-        end
 
         begin
           response = RestClient::Request.execute(
@@ -55,8 +26,7 @@ class PingWorker
             },
             :payload => JSON.dump(
               :terminal => Terminal.keyword,
-              :terminal_ping => condition,
-              :sessions => sessions_per_day
+              :terminal_ping => condition
             )
           )
         rescue Exception => e
@@ -72,10 +42,6 @@ class PingWorker
         end
 
         Sidekiq::Logging.logger.info "Response: #{response.inspect}"
-
-        ActiveRecord::Base.transaction do
-          sessions.each &:destroy
-        end
 
         #
         # PROFILE
@@ -110,6 +76,12 @@ class PingWorker
         end
 
         Sync::ProvidersWorker.perform_async if response[:update_providers]
+
+        #
+        # SESSIONS
+        #
+        last_session = response[:last_session_started_at] || 0
+        Sync::SessionsWorker.perform_async(last_session )if SessionRecord.exists?([ 'started_at > ?', last_session ])
       end
     rescue Timeout::Error => e
       Sidekiq::Logging.logger.warn "Semaphore timeout. #{e.to_s}"

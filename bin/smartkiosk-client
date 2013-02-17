@@ -46,12 +46,16 @@ EventMachine.run do
     if message.key == "modem.accounting"
       message.acknowlege
 
-      p message
-
-      SessionRecord.create(started_at: message[0],
-                           upstream: message[1],
-                           downstream: message[2],
-                           time: message[3])
+      begin
+        SessionRecord.create(message_id: message.id,
+                             started_at: message[0],
+                             upstream: message[1],
+                             downstream: message[2],
+                             time: message[3])
+      rescue => e
+        Smartkiosk::Client::Logging.logger.error "unable to save session record: #{e}"
+        e.backtrace.each { |line| Smartkiosk::Client::Logging.logger.error line }
+      end
     else
       @front_orders.push ["smartware.#{message.key}", message.args].to_json
     end
