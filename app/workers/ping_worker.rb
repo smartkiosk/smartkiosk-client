@@ -46,6 +46,8 @@ class PingWorker
         #
         # PROFILE
         #
+        Terminal.address = response[:address]
+
         unless Terminal.modified_at == response[:profile][:modified_at]
           Terminal.support_phone = response[:profile][:support_phone]
           Terminal.modified_at = response[:profile][:modified_at]

@@ -10,6 +10,7 @@ Application.load 'lib/smartkiosk/config/yaml'
 class Terminal
   include Redis::Objects
 
+  value :address, :global => true
   value :actual_state, :global => true
   value :modified_at, :global => true, :marshal => true
   value :payment_in_progress, :global => true
