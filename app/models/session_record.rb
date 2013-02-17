@@ -1,5 +1,3 @@
 class SessionRecord < ActiveRecord::Base
-  scope :recent, where(
-    arel_table[:created_at].gt(Date.today-1.month)
-  ).order(arel_table[:id].desc)
+  scope :recent, order(arel_table[:id].desc).limit(100)
 end
