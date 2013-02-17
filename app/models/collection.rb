@@ -16,7 +16,8 @@ class Collection < ActiveRecord::Base
         :period_start => I18n.l(period_start),
         :period_end   => I18n.l(created_at),
         :amount       => amount,
-        :banknotes    => Hash[banknotes.sort].inject([]){|arr, (nom, cnt)| arr << {'nominal' => nom, 'count' => cnt, 'product' => nom.to_i*cnt.to_i} }
+        :banknotes    => Hash[banknotes.sort].inject([]){|arr, (nom, cnt)| arr << {'nominal' => nom, 'count' => cnt, 'product' => nom.to_i*cnt.to_i} },
+        :nominals     => banknotes
       }
   end
 
