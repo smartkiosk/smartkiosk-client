@@ -5,6 +5,10 @@ class Application
     json (payment.check ? payment.as_json : false)
   end
 
+  get '/payments/test_printer' do
+    json Smartware.printer.error.blank?
+  end
+
   post '/payments/:id/open_cash_acceptor' do
     payment = Payment.find(params[:id])
     min = nil
