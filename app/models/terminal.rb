@@ -6,6 +6,7 @@ require 'redis/objects'
 require 'file-tail'
 
 Application.load 'lib/smartkiosk/config/yaml'
+Application.load 'lib/smartkiosk/client/version'
 
 class Terminal
   include Redis::Objects
@@ -89,10 +90,6 @@ class Terminal
     self.state == 'active'
   end
 
-  def self.version
-    '0.1'
-  end
-
   def self.ip
     orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true
 
@@ -164,7 +161,7 @@ class Terminal
         :model => Smartware.card_reader.model,
         :version => Smartware.card_reader.version
       },
-      :version => Terminal.version
+      :version => Smartkiosk::Client::VERSION
     }
   end
 end
