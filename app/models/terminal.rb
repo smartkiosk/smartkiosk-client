@@ -108,6 +108,7 @@ class Terminal
 
   def self.as_json(*args)
     {
+      :address => Terminal.address.value,
       :modified_at => Terminal.actual_modified_at,
       :logo_url => Terminal.logo_url,
       :keyword => Terminal.keyword,
